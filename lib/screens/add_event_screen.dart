@@ -1,5 +1,6 @@
 class AddEventScreen extends StatefulWidget {
-  const AddEventScreen({super.key});
+  final EventService eventService;
+  const AddEventScreen({required this.eventService, super.key});
 
   @override
   State<AddEventScreen> createState() => _AddEventScreenState();
@@ -33,7 +34,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
     return _selectedDate;
   }
 
-  void _submitForm(EventService eventService) {
+  void _submitForm() {
     if (_formKey.currentState!.validate()) {
       final newEvent = Event(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -42,7 +43,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
         date: _selectedDate,
         location: _locationController.text,
       );
-      eventService.addEvent(newEvent);
+      widget.eventService.addEvent(newEvent);
       if (mounted) {
         Navigator.pop(context);
       }
@@ -100,7 +101,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: () => _submitForm(EventService()),
+                  onPressed: _submitForm,
                   child: const Text('Add Event'),
                 ),
               ],

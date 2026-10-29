@@ -1,5 +1,6 @@
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final EventService eventService;
+  const HomeScreen({required this.eventService, super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -11,7 +12,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _eventService = EventService();
+    _eventService = widget.eventService;
   }
 
   @override

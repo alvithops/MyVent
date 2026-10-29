@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/home_screen.dart';
 import 'screens/add_event_screen.dart';
 import 'screens/event_list_screen.dart';
 
-void main() {
-  runApp(const EventManagementApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  runApp(EventManagementApp(prefs: prefs));
 }
 
 class EventManagementApp extends StatelessWidget {
-  const EventManagementApp({super.key});
+  const EventManagementApp({super.key, required this.prefs});
+
+  final SharedPreferences prefs;
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +25,12 @@ class EventManagementApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const HomeScreen(),
-        '/add-event': (context) => const AddEventScreen(),
-        '/event-list': (context) => const EventListScreen(),
+        '/': (context) =>
+            HomeScreen(eventService: EventService(prefs: prefs)),
+        '/add-event': (context) =>
+            AddEventScreen(eventService: EventService(prefs: prefs)),
+        '/event-list': (context) =>
+            EventListScreen(eventService: EventService(prefs: prefs)),
       },
       home: const HomeScreen(),
     );
